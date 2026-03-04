@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FreshSense — Smarter Farming Through the Power of Smell</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-deep:   #1a3a2a;
+      --green-mid:    #2d6a4f;
+      --green-soft:   #40916c;
+      --green-light:  #74c69d;
+      --green-pale:   #d8f3dc;
+      --cream:        #f8f5ef;
+      --amber:        #e9c46a;
+      --rust:         #e76f51;
+      --text-dark:    #12261c;
+      --text-body:    #3a4f42;
+      --text-muted:   #6b8072;
+      --white:        #ffffff;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text-body);
+      overflow-x: hidden;
+    }
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 6vw;
+      background: rgba(26,58,42,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(116,198,157,0.15);
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--green-light);
+      letter-spacing: 0.02em;
+    }
+    .nav-logo span { color: var(--amber); }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: color 0.25s;
+    }
+    .nav-links a:hover { color: var(--green-light); }
+    .nav-cta {
+      padding: 9px 22px;
+      background: var(--amber);
+      color: var(--green-deep);
+      border: none;
+      border-radius: 50px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: background 0.25s, transform 0.2s;
+    }
+    .nav-cta:hover { background: #f4d17d; transform: translateY(-1px); }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      background: var(--green-deep);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 4rem;
+      padding: 120px 8vw 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Decorative circles */
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(64,145,108,0.18) 0%, transparent 70%);
+      top: -100px; right: -100px;
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(233,196,106,0.1) 0%, transparent 70%);
+      bottom: -50px; left: 10%;
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: rgba(116,198,157,0.15);
+      border: 1px solid rgba(116,198,157,0.3);
+      border-radius: 50px;
+      color: var(--green-light);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.7s ease both;
+    }
+    .badge-dot {
+      width: 7px; height: 7px;
+      background: var(--green-light);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    .hero-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.6rem, 5vw, 4.2rem);
+      line-height: 1.1;
+      color: var(--white);
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.8s 0.1s ease both;
+    }
+    .hero-headline em {
+      font-style: italic;
+      color: var(--amber);
+    }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: rgba(255,255,255,0.65);
+      max-width: 480px;
+      margin-bottom: 2.5rem;
+      animation: fadeUp 0.8s 0.2s ease both;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      animation: fadeUp 0.8s 0.3s ease both;
+    }
+
+    .btn-primary {
+      padding: 14px 32px;
+      background: var(--amber);
+      color: var(--green-deep);
+      border: none;
+      border-radius: 50px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
+      box-shadow: 0 4px 20px rgba(233,196,106,0.35);
+    }
+    .btn-primary:hover { background: #f4d17d; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(233,196,106,0.4); }
+
+    .btn-outline {
+      padding: 14px 32px;
+      background: transparent;
+      color: rgba(255,255,255,0.85);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 50px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: border-color 0.25s, color 0.25s;
+    }
+    .btn-outline:hover { border-color: var(--green-light); color: var(--green-light); }
+
+    /* Hero visual */
+    .hero-visual {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: fadeLeft 0.9s 0.2s ease both;
+    }
+
+    .device-card {
+      width: 320px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(116,198,157,0.2);
+      border-radius: 24px;
+      padding: 32px;
+      backdrop-filter: blur(20px);
+      position: relative;
+    }
+    .device-icon {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .device-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      background: rgba(64,145,108,0.2);
+      border-radius: 12px;
+      margin-bottom: 1.2rem;
+    }
+    .status-dot { width: 8px; height: 8px; background: #52b788; border-radius: 50%; animation: pulse 2s infinite; }
+    .status-text { color: var(--green-light); font-size: 0.82rem; font-weight: 500; }
+
+    .sensor-bars { display: flex; flex-direction: column; gap: 10px; }
+    .bar-row { display: flex; align-items: center; gap: 10px; }
+    .bar-label { color: rgba(255,255,255,0.5); font-size: 0.75rem; width: 50px; }
+    .bar-track { flex: 1; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 3px; }
+    .bar-fill.green { background: var(--green-light); width: 82%; }
+    .bar-fill.amber { background: var(--amber); width: 65%; }
+    .bar-fill.safe  { background: #52b788; width: 91%; }
+
+    .alert-chip {
+      margin-top: 1.5rem;
+      padding: 12px 16px;
+      background: rgba(231,111,81,0.15);
+      border: 1px solid rgba(231,111,81,0.3);
+      border-radius: 10px;
+      color: #f4a261;
+      font-size: 0.78rem;
+      line-height: 1.5;
+    }
+
+    .stat-chips {
+      position: absolute;
+      bottom: -20px; right: -30px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .chip {
+      padding: 8px 16px;
+      background: var(--white);
+      border-radius: 50px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--green-deep);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+
+    /* ===== TRUST BAR ===== */
+    .trust-bar {
+      background: var(--white);
+      padding: 28px 8vw;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      gap: 2rem;
+      flex-wrap: wrap;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+    }
+    .trust-icon { font-size: 1.3rem; }
+
+    /* ===== SECTION BASE ===== */
+    section { padding: 100px 8vw; }
+    .section-label {
+      display: inline-block;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--green-soft);
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      color: var(--text-dark);
+      line-height: 1.2;
+      margin-bottom: 1.2rem;
+    }
+    .section-sub {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.75;
+      max-width: 560px;
+    }
+
+    /* ===== FEATURES SECTION ===== */
+    .features { background: var(--cream); }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .feature-card {
+      padding: 36px 28px;
+      background: var(--white);
+      border-radius: 20px;
+      border: 1px solid rgba(0,0,0,0.06);
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--green-soft), var(--green-light));
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+    .feature-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
+    .feature-card:hover::after { transform: scaleX(1); }
+
+    .feature-emoji { font-size: 2.2rem; margin-bottom: 1rem; display: block; }
+    .feature-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: var(--text-dark);
+      margin-bottom: 0.8rem;
+    }
+    .feature-desc { font-size: 0.9rem; color: var(--text-muted); line-height: 1.7; }
+
+    /* ===== HOW IT WORKS ===== */
+    .how { background: var(--green-deep); }
+    .how .section-title { color: var(--white); }
+    .how .section-label { color: var(--green-light); }
+    .how .section-sub { color: rgba(255,255,255,0.6); }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-top: 3.5rem;
+      position: relative;
+    }
+    .steps::before {
+      content: '';
+      position: absolute;
+      top: 28px; left: 10%; right: 10%;
+      height: 1px;
+      background: rgba(116,198,157,0.25);
+      z-index: 0;
+    }
+
+    .step {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    .step-num {
+      width: 56px; height: 56px;
+      background: var(--green-mid);
+      border: 2px solid var(--green-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.2rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--white);
+    }
+    .step-title { color: var(--white); font-weight: 500; font-size: 0.95rem; margin-bottom: 0.6rem; }
+    .step-desc { color: rgba(255,255,255,0.5); font-size: 0.82rem; line-height: 1.6; }
+
+    /* ===== WHY SECTION ===== */
+    .why {
+      background: var(--white);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+    }
+
+    .why-benefits { list-style: none; margin-top: 2rem; display: flex; flex-direction: column; gap: 1.2rem; }
+    .benefit-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 18px 20px;
+      background: var(--cream);
+      border-radius: 14px;
+      transition: background 0.25s;
+    }
+    .benefit-item:hover { background: var(--green-pale); }
+    .benefit-icon {
+      width: 38px; height: 38px;
+      background: var(--green-pale);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .benefit-text strong { display: block; font-weight: 500; color: var(--text-dark); font-size: 0.92rem; margin-bottom: 2px; }
+    .benefit-text span { font-size: 0.82rem; color: var(--text-muted); }
+
+    /* Right stats panel */
+    .why-stats { display: flex; flex-direction: column; gap: 1.5rem; }
+    .stat-card {
+      padding: 32px;
+      background: var(--green-deep);
+      border-radius: 20px;
+      color: var(--white);
+    }
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.5rem;
+      color: var(--amber);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+    .stat-desc { font-size: 0.88rem; color: rgba(255,255,255,0.6); line-height: 1.5; }
+    .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .stat-card.small { padding: 24px; }
+    .stat-card.small .stat-number { font-size: 2.4rem; }
+
+    /* ===== WHO SECTION ===== */
+    .who { background: var(--cream); }
+    .who-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.2rem;
+      margin-top: 3rem;
+    }
+    .who-card {
+      padding: 28px 24px;
+      background: var(--white);
+      border-radius: 16px;
+      border-left: 4px solid var(--green-soft);
+      font-size: 0.88rem;
+      color: var(--text-body);
+      font-weight: 400;
+      line-height: 1.5;
+    }
+    .who-card strong { display: block; color: var(--text-dark); font-size: 0.95rem; margin-bottom: 4px; }
+
+    /* ===== CTA SECTION ===== */
+    .cta-section {
+      background: linear-gradient(135deg, var(--green-mid) 0%, var(--green-deep) 100%);
+      text-align: center;
+      padding: 120px 8vw;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      width: 700px; height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(233,196,106,0.08) 0%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+    }
+    .cta-section .section-title { color: var(--white); max-width: 600px; margin: 0 auto 1rem; }
+    .cta-section .section-sub { color: rgba(255,255,255,0.65); margin: 0 auto 2.5rem; text-align: center; }
+    .cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; position: relative; }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: #0d1f16;
+      color: rgba(255,255,255,0.6);
+      padding: 60px 8vw 32px;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 4rem;
+      margin-bottom: 3rem;
+    }
+    .footer-brand .nav-logo { font-size: 1.6rem; display: block; margin-bottom: 0.8rem; }
+    .footer-brand p { font-size: 0.88rem; line-height: 1.7; max-width: 280px; }
+    .footer-col h4 { color: var(--white); font-size: 0.88rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 1rem; }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+    .footer-links a { color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.88rem; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--green-light); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.82rem;
+    }
+    .social-icons { display: flex; gap: 1rem; }
+    .social-icon {
+      width: 34px; height: 34px;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem;
+      text-decoration: none;
+      color: rgba(255,255,255,0.5);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .social-icon:hover { border-color: var(--green-light); color: var(--green-light); }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeLeft {
+      from { opacity: 0; transform: translateX(30px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.3); }
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1024px) {
+      .features-grid, .steps { grid-template-columns: repeat(2, 1fr); }
+      .steps::before { display: none; }
+      .why { grid-template-columns: 1fr; gap: 3rem; padding: 80px 8vw; }
+      .who-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+      .footer-brand { grid-column: 1 / -1; }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 14px 5vw; }
+      .nav-links { display: none; }
+      .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding: 100px 6vw 60px;
+      }
+      .hero-sub { margin: 0 auto 2rem; }
+      .hero-actions { justify-content: center; }
+      .hero-visual { order: -1; }
+      .device-card { width: 280px; }
+      .stat-chips { display: none; }
+      .features-grid { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: 1fr 1fr; }
+      .who-grid { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; gap: 2rem; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+      .stat-row { grid-template-columns: 1fr; }
+      section { padding: 70px 6vw; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-headline { font-size: 2.2rem; }
+      .steps { grid-template-columns: 1fr; }
+      .trust-bar { flex-direction: column; align-items: flex-start; padding: 20px 6vw; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">Fresh<span>Sense</span></div>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#how">How It Works</a></li>
+      <li><a href="#why">Benefits</a></li>
+      <li><a href="#who">Who It's For</a></li>
+    </ul>
+    <button class="nav-cta" onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})">Get Early Access</button>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        Now Available for Mushroom Farms
+      </div>
+      <h1 class="hero-headline">
+        The Farm<br><em>Nose That<br>Never Sleeps</em>
+      </h1>
+      <p class="hero-sub">
+        FreshSense uses smell-detection technology to protect your mushroom harvest 24/7—alerting you to contamination hours before it's visible, so you can act before it's too late.
+      </p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})">Get Started Today</button>
+        <button class="btn-outline" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">See How It Works</button>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="device-card">
+        <span class="device-icon">🍄</span>
+        <div class="device-status">
+          <span class="status-dot"></span>
+          <span class="status-text">Room 1 — Air Quality Monitoring</span>
+        </div>
+        <div class="sensor-bars">
+          <div class="bar-row">
+            <span class="bar-label">VOC</span>
+            <div class="bar-track"><div class="bar-fill green"></div></div>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Mold</span>
+            <div class="bar-track"><div class="bar-fill amber"></div></div>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">Safety</span>
+            <div class="bar-track"><div class="bar-fill safe"></div></div>
+          </div>
+        </div>
+        <div class="alert-chip">
+          ⚠️ Possible mold activity detected in <strong>Room 2</strong> — check humidity or ventilation.
+        </div>
+        <div class="stat-chips">
+          <div class="chip">✅ Harvest Protected</div>
+          <div class="chip">📡 Live Monitoring</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- TRUST BAR -->
+  <div class="trust-bar">
+    <div class="trust-item"><span class="trust-icon">🏆</span> Award-Winning AgriTech</div>
+    <div class="trust-item"><span class="trust-icon">🌿</span> Eco-Friendly Design</div>
+    <div class="trust-item"><span class="trust-icon">📱</span> Mobile-First App</div>
+    <div class="trust-item"><span class="trust-icon">🔒</span> Data Secure & Private</div>
+    <div class="trust-item"><span class="trust-icon">⚡</span> Real-Time Alerts</div>
+  </div>
+
+  <!-- FEATURES -->
+  <section class="features" id="features">
+    <div class="reveal">
+      <span class="section-label">Core Features</span>
+      <h2 class="section-title">Everything Your Farm<br>Needs to Stay Protected</h2>
+      <p class="section-sub">A complete system built around the unique needs of mushroom growers—from backyard hobbyists to large commercial operations.</p>
+    </div>
+    <div class="features-grid reveal">
+      <div class="feature-card">
+        <span class="feature-emoji">👃</span>
+        <h3 class="feature-title">Smart Odor Detection</h3>
+        <p class="feature-desc">Our palm-sized sensor continuously reads the air for volatile compounds that signal early mold, bacteria, or contamination—hours before it becomes visible.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-emoji">📱</span>
+        <h3 class="feature-title">Real-Time Mobile Alerts</h3>
+        <p class="feature-desc">Instant push notifications to your phone the moment something unusual is detected. Clear, actionable messages—not confusing sensor numbers.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-emoji">🌡️</span>
+        <h3 class="feature-title">Air Quality Dashboard</h3>
+        <p class="feature-desc">Visual dashboard showing live VOC levels, mold risk, humidity trends, and room-by-room health status at a glance—color-coded for simplicity.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-emoji">⚙️</span>
+        <h3 class="feature-title">Plug-and-Play Setup</h3>
+        <p class="feature-desc">No wiring, no complicated installation. Just place the device in your grow room, download the app, and FreshSense starts protecting immediately.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-emoji">📊</span>
+        <h3 class="feature-title">Historical Trend Analysis</h3>
+        <p class="feature-desc">Review past air quality data to identify patterns, optimize your growing conditions, and prevent recurring contamination events over time.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-emoji">🔋</span>
+        <h3 class="feature-title">Long Battery Life</h3>
+        <p class="feature-desc">Designed for low-power continuous operation. FreshSense runs for weeks on a single charge, so monitoring never stops between harvests.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how" id="how">
+    <div class="reveal" style="text-align:center; max-width: 600px; margin: 0 auto;">
+      <span class="section-label">The Process</span>
+      <h2 class="section-title">From Setup to<br>Peace of Mind in Minutes</h2>
+      <p class="section-sub" style="margin: 0 auto;">Four simple steps. Zero expertise required. Complete protection from day one.</p>
+    </div>
+    <div class="steps reveal">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-title">Place the Sensor</div>
+        <p class="step-desc">Position the FreshSense device in your mushroom grow room. No wiring or special mounting needed.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-title">Connect to App</div>
+        <p class="step-desc">Pair the sensor with your smartphone via the FreshSense app in under 60 seconds.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-title">Continuous Monitoring</div>
+        <p class="step-desc">FreshSense silently reads air quality every second, learning what's normal for your farm.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-title">Get Alerts & Act</div>
+        <p class="step-desc">Receive instant alerts when something changes, and take action before any damage spreads.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY FRESHSENSE -->
+  <section class="why" id="why">
+    <div class="reveal">
+      <span class="section-label">Why FreshSense</span>
+      <h2 class="section-title">Protect Your<br>Harvest & Your Income</h2>
+      <p class="section-sub">A single contamination event can wipe out 30–70% of your crop. FreshSense gives you the early warning you need to prevent that.</p>
+      <ul class="why-benefits">
+        <li class="benefit-item">
+          <div class="benefit-icon">🛡️</div>
+          <div class="benefit-text">
+            <strong>Prevent Crop Loss</strong>
+            <span>Early warnings save most or all of the harvest before contamination spreads.</span>
+          </div>
+        </li>
+        <li class="benefit-item">
+          <div class="benefit-icon">💰</div>
+          <div class="benefit-text">
+            <strong>Save Money</strong>
+            <span>Protecting your crop means protecting your income. Avoid costly total batch losses.</span>
+          </div>
+        </li>
+        <li class="benefit-item">
+          <div class="benefit-icon">😌</div>
+          <div class="benefit-text">
+            <strong>Reduce Stress</strong>
+            <span>No more constant manual checks. FreshSense watches over your farm 24 hours a day.</span>
+          </div>
+        </li>
+        <li class="benefit-item">
+          <div class="benefit-icon">⭐</div>
+          <div class="benefit-text">
+            <strong>Improve Mushroom Quality</strong>
+            <span>Healthier environments produce better-looking, better-tasting mushrooms that sell for more.</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="why-stats reveal">
+      <div class="stat-card">
+        <div class="stat-number">30–70%</div>
+        <div class="stat-desc">of a harvest can be destroyed by a single contamination event that goes undetected too long.</div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-card small">
+          <div class="stat-number">24/7</div>
+          <div class="stat-desc">Continuous air quality monitoring without any breaks.</div>
+        </div>
+        <div class="stat-card small" style="background: var(--green-mid);">
+          <div class="stat-number">Hours</div>
+          <div class="stat-desc">Earlier detection compared to visual-only methods.</div>
+        </div>
+      </div>
+      <div class="stat-card" style="background: var(--amber); color: var(--green-deep);">
+        <div class="stat-number" style="color: var(--green-deep);">5+</div>
+        <div class="stat-desc" style="color: rgba(26,58,42,0.7);">Types of mushroom farms already benefiting—oyster, shiitake, button, lion's mane, and more.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHO IT'S FOR -->
+  <section class="who" id="who">
+    <div class="reveal" style="text-align:center;">
+      <span class="section-label">Who It's For</span>
+      <h2 class="section-title">Built for Every<br>Mushroom Grower</h2>
+      <p class="section-sub" style="margin: 0 auto 0;">Whether you grow in a backyard tent or a large commercial facility, FreshSense adapts to your operation.</p>
+    </div>
+    <div class="who-grid reveal">
+      <div class="who-card">
+        <strong>🌱 Backyard Growers</strong>
+        Hobbyists and small-scale growers who want professional-level protection without the lab price tag.
+      </div>
+      <div class="who-card">
+        <strong>🏭 Commercial Farms</strong>
+        Mid-sized and large operations running multiple grow rooms who need reliable, scalable monitoring.
+      </div>
+      <div class="who-card">
+        <strong>🏗️ Indoor & Vertical Farms</strong>
+        Controlled-environment growers who rely on precision conditions to maximize yield per square foot.
+      </div>
+      <div class="who-card">
+        <strong>🧪 Substrate Makers</strong>
+        Producers who prepare growing materials and need to ensure their substrate is clean before inoculation.
+      </div>
+      <div class="who-card">
+        <strong>🎓 New Growers</strong>
+        First-timers who want extra confidence and a safety net as they learn the ropes of mushroom cultivation.
+      </div>
+      <div class="who-card">
+        <strong>🌾 Specialty Varieties</strong>
+        Growers of oyster, shiitake, lion's mane, reishi, and other high-value mushrooms with zero tolerance for loss.
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA SECTION -->
+  <section class="cta-section" id="cta">
+    <span class="section-label" style="color: var(--green-light); position:relative;">Start Protecting Your Farm</span>
+    <h2 class="section-title" style="position:relative;">Ready to Grow<br><em>with Confidence?</em></h2>
+    <p class="section-sub" style="position:relative;">Join thousands of mushroom farmers who trust FreshSense to watch over their harvest. Early access slots are limited.</p>
+    <div class="cta-btns">
+      <button class="btn-primary">Get Early Access</button>
+      <button class="btn-outline" style="border-color: rgba(255,255,255,0.4);">Schedule a Demo</button>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <span class="nav-logo">Fresh<span>Sense</span></span>
+        <p>Smarter farming through the power of smell. Protecting mushroom harvests 24/7 with intelligent odor-detection technology.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <ul class="footer-links">
+          <li><a href="#features">Features</a></li>
+          <li><a href="#how">How It Works</a></li>
+          <li><a href="#why">Benefits</a></li>
+          <li><a href="#">Pricing</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul class="footer-links">
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Mission</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 FreshSense. All rights reserved.</p>
+      <div class="social-icons">
+        <a href="#" class="social-icon">f</a>
+        <a href="#" class="social-icon">in</a>
+        <a href="#" class="social-icon">tw</a>
+        <a href="#" class="social-icon">ig</a>
+      </div>
+      <p>📧 hello@freshsense.ag &nbsp;|&nbsp; 📞 +63 912 345 6789</p>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
